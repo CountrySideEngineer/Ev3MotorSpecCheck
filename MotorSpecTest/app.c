@@ -53,7 +53,7 @@ void main_task(intptr_t unused)
             motor_counts_current);
 
         if (800 <= main_task_counter) {
-            break;
+            runs_main_task = false;
         }
         main_task_counter++;
     }
