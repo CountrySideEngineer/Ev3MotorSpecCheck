@@ -44,8 +44,8 @@ void main_task(intptr_t unused)
     ev3_stp_cyc(CYC_TASK_10MS);
     ev3_stp_cyc(CYC_TASK_1SEC);
 
-    ev3_lcd_draw_string("FINISHED", 0, 0);
     fclose(logging_file);
+    ev3_lcd_draw_string("FINISHED", 0, 0);
 }
 
 /**
@@ -56,7 +56,7 @@ void cyc_task_100msec(intptr_t unused)
     motor_power_current = ev3_motor_get_power(motor_port);
     motor_counts_current = ev3_motor_get_counts(motor_port);
 
-    if (cyc_task_1sec_count <= 80) {
+    if (cyc_task_100msec_count <= 800) {
         fprintf(logging_file, "%d,%d,%d,%d\n", 
             cyc_task_100msec_count,
             motor_power_output,
@@ -78,12 +78,12 @@ void cyc_task_1sec(intptr_t unused)
         motor_power_output_change = 5;
     }
 
+    motor_power_output += motor_power_output_change;
     if (cyc_task_1sec_count <= 80) {
         ev3_motor_set_power(motor_port, motor_power_output);
     } else {
         ev3_motor_set_power(motor_port, 0);
     }
 
-    motor_power_output += motor_power_output_change;
     cyc_task_1sec_count++;
 }
